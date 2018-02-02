@@ -3,9 +3,9 @@
   <div id="q-app">
 
     <q-layout ref="layout" view="hHh lPr lFr">
-      <q-toolbar slot="header" color="orange">
+      <q-toolbar slot="header" class="custom-theme-color">
 
-        <q-toolbar-title>
+        <q-toolbar-title class="text-center">
           BIR Tax Calculator
         </q-toolbar-title>
 
@@ -15,7 +15,7 @@
 
       </q-toolbar>
 
-      <q-tabs slot="navigation" v-model="selectedTab" color="orange">
+      <q-tabs slot="navigation" v-model="selectedTab">
 
         <!-- Tabs -->
         <q-tab slot="title" name="daily-tab" @select="switchTab" default>Daily</q-tab>
@@ -25,7 +25,8 @@
 
         <!-- Daily Tab -->
         <q-tab-pane name="daily-tab">
-          <q-input v-model="displayAmount" type="tel" prefix="₱ " stack-label="Enter Amount" @change="computeTakeHomePay" clearable/>
+            <q-scroll-area style="width: 100%; height: 330px;">
+          <q-input v-model="displayAmount" type="tel" prefix="₱ " :error="error" :stack-label="error ? 'Invalid Amount' : 'Enter Amount'" @change="computeTakeHomePay" clearable/>
 
           <q-list>
             <q-item>
@@ -49,11 +50,13 @@
             </q-item>
 
           </q-list>
+            </q-scroll-area>
         </q-tab-pane>
 
         <!-- Weekly Tab -->
         <q-tab-pane name="weekly-tab">
-          <q-input v-model="displayAmount" type="tel" prefix="₱ " stack-label="Enter Amount" @change="computeTakeHomePay" clearable/>
+            <q-scroll-area style="width: 100%; height: 330px;">
+          <q-input v-model="displayAmount" type="tel" prefix="₱ " :error="error" :stack-label="error ? 'Invalid Amount' : 'Enter Amount'" @change="computeTakeHomePay" clearable/>
 
           <q-list>
             <q-item>
@@ -77,11 +80,13 @@
             </q-item>
 
           </q-list>
+            </q-scroll-area>
         </q-tab-pane>
 
         <!-- Semi Monthly Tab -->
         <q-tab-pane name="semi-monthly-tab">
-          <q-input v-model="displayAmount" type="tel" prefix="₱ " stack-label="Enter Amount" @change="computeTakeHomePay" clearable/>
+            <q-scroll-area style="width: 100%; height: 330px;">
+          <q-input v-model="displayAmount" type="tel" prefix="₱ " :error="error" :stack-label="error ? 'Invalid Amount' : 'Enter Amount'" @change="computeTakeHomePay" clearable/>
 
           <q-list>
             <q-item>
@@ -105,11 +110,13 @@
             </q-item>
 
           </q-list>
+            </q-scroll-area>
         </q-tab-pane>
 
         <!-- Monthly Tab -->
         <q-tab-pane name="monthly-tab">
-          <q-input v-model="amount" type="tel" prefix="₱ " stack-label="Enter Amount" @change="computeTakeHomePay" clearable/>
+
+          <q-input v-model="displayAmount" type="tel" prefix="₱ " :error="error" :stack-label="error ? 'Invalid Amount' : 'Enter Amount'" @change="computeTakeHomePay" clearable/>
 
           <q-list highlight>
 
@@ -178,6 +185,7 @@
             </q-item>
 
           </q-list>
+
         </q-tab-pane>
 
       </q-tabs>
@@ -188,8 +196,9 @@
 
 <script>
 
-    import { required } from 'vuelidate/lib/validators'
-    import { QTabs, QTab, QBtn, QInput, QRouteTab, QTabPane, QToolbar, QToolbarTitle, QLayout, QIcon, QSpinnerHourglass, QList, QListHeader, QItem, QItemSide, QItemMain, QItemTile, QItemSeparator, Toast  } from 'quasar'
+    import { QTabs, QTab, QBtn, QInput, QRouteTab, QTabPane, QToolbar, QToolbarTitle, QLayout, QIcon, QSpinnerHourglass, QList, QListHeader, QItem, QItemSide, QItemMain, QItemTile, QItemSeparator, Toast, QScrollArea  } from 'quasar'
+
+    var admobid = {};
 
     export default {
         components: {
@@ -211,7 +220,8 @@
             QItemMain,
             QItemTile,
             QItemSeparator,
-            Toast
+            Toast,
+            QScrollArea
         },
         data () {
             return {
@@ -225,48 +235,39 @@
                 deductPhilHealth: 0,
                 deductSSS: 0,
                 deductPagIbig: 0,
-                totalDeduction: 0
+                totalDeduction: 0,
+                error: false,
+                adsShown: false
             }
         },
-        validations: {
-
-                amount: { required  }
-
-        },
         created() {
-            admob.initAdmob("ca-app-pub-9675873595337521/7000001749","ca-app-pub-9675873595337521/7940057636");
+            /*admob.initAdmob("ca-app-pub-9675873595337521/7000001749","ca-app-pub-9675873595337521/7940057636");
 
             var admobParam=new admob.Params();
-            admobParam.isTesting=true;
+            admobParam.isTesting=false;
             admob.showBanner(admob.BannerSize.BANNER,admob.Position.BOTTOM_CENTER,admobParam);
-        },
-        watch: {
-          amount: function() {
+*/
+            admobid = {
+                banner: 'ca-app-pub-1165380004069778/4879259619',
+                interstitial: 'ca-app-pub-1165380004069778/2997780853'
+            };
 
-          }
+            if(AdMob) AdMob.createBanner({
+                adId: admobid.banner,
+                position: AdMob.AD_POSITION.BOTTOM_CENTER,
+                autoShow: true });
+
+            if(AdMob) AdMob.prepareInterstitial( {adId:admobid.interstitial, autoShow:false} );
+
         },
         methods: {
-            isNumber: function(evt) {
-                /*console.log(evt);
-                evt = (evt) ? evt : window.event;
-                var charCode = (evt.which) ? evt.which : evt.keyCode;
-                var regexp = /^(\d{1,8})(\.\d{0,8})?$/g;
-                //var regexp2 = /^\d|\.$/g;
-                console.log(evt);
-                console.log(evt.target.value);
-                if (regexp.test(evt.target.value)) {
-
-                    console.log('success')
-                    return true;
-
-                } else {
-                    console.log('fail')
-                    this.amount = evt.target.value;
-                    //evt.preventDefault();
-
-                }*/
-            },
             switchTab () {
+                // show the interstitial later, e.g. at end of game level
+                if(!this.adsShown) {
+                    if(AdMob) AdMob.showInterstitial();
+                    this.adsShown = true;
+                }
+
                 this.amount = 0;
                 this.result = 0;
                 this.totalDeduction = 0;
@@ -275,28 +276,26 @@
                 this.deductSSS = 0;
                 this.deductPagIbig = 0;
 
-
             },
             computeTakeHomePay (event, done) {
 
-    /*            var regexp = /^(\d{1,8})(\.\d{0,8})?$/g;
-                //var regexp2 = /^\d|\.$/g;
-    console.log(this.amount);
-                if(regexp.test(newValue)) {
-                    this.amount = newValue;
-                    console.log('success')
-                }
-                else {
-                    console.log('fail')
+                var regexp = /^(\d{1,8})(\.\d{0,8})?$/g;
 
-                }*/
+                if (!regexp.test(this.amount)) {
 
-                //this.$v.amount.$touch()
-                if (true) {
                     Toast.create.negative('Please enter a valid amount.')
+                    this.result = 0;
+                    this.totalDeduction = 0;
+                    this.totalTax = 0;
+                    this.deductPhilHealth = 0;
+                    this.deductSSS = 0;
+                    this.deductPagIbig = 0;
+                    this.error = true;
                     return
-                }
-                if(this.amount) {
+
+                } else {
+
+                    this.error = false;
 
                     if(this.selectedTab === 'daily-tab') {
 
@@ -474,15 +473,6 @@
                     this.totalDeduction = (this.amount - this.taxableAmount) + this.totalTax;
                     this.result = this.taxableAmount - this.totalTax;
 
-                } else {
-
-                    this.result = 0;
-                    this.totalDeduction = 0;
-                    this.totalTax = 0;
-                    this.deductPhilHealth = 0;
-                    this.deductSSS = 0;
-                    this.deductPagIbig = 0;
-
                 }
             }
         },
@@ -515,25 +505,6 @@
 		        },
 		        set: function (newValue) {
 
-
-
-                    /*var regexp = /^(\d{1,8})(\.\d{0,8})?$/g;
-                    //var regexp2 = /^\d|\.$/g;
-
-                        if(regexp.test(newValue)) {
-                            this.amount = newValue;
-                            console.log('success')
-                        }
-
-
-                     else {
-                        console.log('fail')
-
-                    }*/
-
-
-
-                    console.log(newValue)
                     this.amount = newValue;
 		        }
             }
@@ -541,4 +512,13 @@
     }
 </script>
 
-<style></style>
+<style>
+    .custom-theme-color {
+        background-color: #4caf50;
+    }
+
+    .q-tabs-head {
+        background-color: #4caf50;
+    }
+
+</style>

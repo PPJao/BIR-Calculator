@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.appsilog.taxcalculatorph" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>BIR Tax Calculator</name>
     <description>
         A tax calculator for the new tax system of the Philippines. Compute for all the deductions on your salary including your tax.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
+    <author email="jay@appsilog.ph" href="http://appsilog.ph">
         Appsilog
     </author>
     <content src="index.html" />
@@ -17,16 +17,16 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <preference name="Orientation" value="portrait" />
-    <preference name="Fullscreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <preference name="android-minSdkVersion" value="14" />
-        <icon src="res/icon/android/icon-36-ldpi.png" density="ldpi" />
-        <icon src="res/icon/android/icon-48-mdpi.png" density="mdpi" />
-        <icon src="res/icon/android/icon-72-hdpi.png" density="hdpi" />
-        <icon src="res/icon/android/icon-96-xhdpi.png" density="xhdpi" />
-
+        <preference name="android-minSdkVersion" value="16" />
+        <icon density="ldpi" src="res/icon/android/icon-36-ldpi.png" />
+        <icon density="mdpi" src="res/icon/android/icon-48-mdpi.png" />
+        <icon density="hdpi" src="res/icon/android/icon-72-hdpi.png" />
+        <icon density="xhdpi" src="res/icon/android/icon-96-xhdpi.png" />
+        <icon density="xxhdpi" src="res/icon/android/icon-144-xxhdpi.png" />
+        <icon density="xxxhdpi" src="res/icon/android/icon-192-xxxhdpi.png" />
         <splash density="land-hdpi" src="res/screen/android/screen-hdpi-landscape.png" />
         <splash density="land-ldpi" src="res/screen/android/screen-ldpi-landscape.png" />
         <splash density="land-mdpi" src="res/screen/android/screen-mdpi-landscape.png" />
@@ -35,6 +35,8 @@
         <splash density="port-ldpi" src="res/screen/android/screen-ldpi-portrait.png" />
         <splash density="port-mdpi" src="res/screen/android/screen-mdpi-portrait.png" />
         <splash density="port-xhdpi" src="res/screen/android/screen-xhdpi-portrait.png" />
+        <splash density="port-xxhdpi" src="res/screen/android/screen-xxhdpi-portrait.png" />
+        <splash density="port-xxxhdpi" src="res/screen/android/screen-xxxhdpi-portrait.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -42,6 +44,6 @@
     </platform>
     <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
-    <plugin name="admob" spec="^5.5.0" />
-    <engine name="android" spec="^6.3.0" />
+    <plugin name="cordova-plugin-admobpro" spec="^2.30.1" />
+    <engine name="android" spec="^7.0.0" />
 </widget>
